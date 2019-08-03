@@ -90,7 +90,8 @@ csv_columns_left = csv_columns
 print("Set global values")
 conference_code = str(input("Conference Code [DC27]: ") or "DC27")
 event_type = int(input("Event Type [9]: ") or "9")
-location = str(input("Location [Bally’s Las Vegas - Jubilee Tower 2nd floor]: ") or "Bally’s Las Vegas - Jubilee Tower 2nd floor")
+#Uncomment if it's just one location
+#location = str(input("Location [Bally’s Las Vegas - Jubilee Tower 2nd floor]: ") or "Bally’s Las Vegas - Jubilee Tower 2nd floor")
 
 print('\n\n')
 print("Choose which CSV column headers to set to which Hacker Tracker Option")
@@ -99,7 +100,7 @@ duration, csv_columns_left = choose_csv_column("duration (in minutes)", csv_colu
 title, csv_columns_left = choose_csv_column("title", csv_columns_left)
 speakers, csv_columns_left = choose_csv_column("speakers", csv_columns_left)
 description, csv_columns_left = choose_csv_column("description", csv_columns_left)
-
+location, csv_columns_left = choose_csv_column("location", csv_columns_left)
 '''
 # Hardcoded Skytalks Values
 conference_code = "DC27"
@@ -126,11 +127,13 @@ for event in list_of_events:
         hacker_tracker_event_json.update({"start_date": str(convert_to_isotime(event[start_date]))})
         hacker_tracker_event_json.update({"id": id})
         hacker_tracker_event_json.update({"description": event[description]})
-        hacker_tracker_event_json.update({"location": location})
+        hacker_tracker_event_json.update({"location": event[location]})
+        # Uncomment if just one location
+        #hacker_tracker_event_json.update({"location": location})
         hacker_tracker_event_json.update({"link": ""})
         # hacker_tracker_event_json.update({"speakers": event[speakers].splitlines()})
         this_event_speakers=[]
-        for speaker in event[speakers].splitlines():
+        for speaker in event[speakers].split(", "):
             speakers_list, speaker_to_append = get_speaker_id(speakers_list, speaker, current_speaker_id, conference_code)
             this_event_speakers.append(speaker_to_append)
             if current_speaker_id < speaker_to_append:
